@@ -1,6 +1,7 @@
 import Vue from 'vue'
-import Router from 'vue-router'
 import auth from '@/auth'
+import axios from 'axios'
+import Router from 'vue-router'
 import HelloWorld from '@/components/HelloWorld'
 import AuthPage from '@/components/Auth/AuthPage'
 import StudentsComponent from '@/components/StudentsComponent'
@@ -26,11 +27,13 @@ export default new Router({
       name: 'Students',
       component: StudentsComponent,
       beforeEnter (to, from, next) {
-        if (localStorage.getItem('token')) {
-          auth.user.authenticated = true
-        }
-        if (auth.user.authenticated) return next()
-        return next({path: '/authentication'})
+        axios.get('http://dev.lumen/auth/check', auth.getAuthHeader())
+        .then(res => {
+          console.log('Response received', res.data)
+          next()
+        }).catch(e => {
+          next('/authentication')
+        })
       }
     },
     {

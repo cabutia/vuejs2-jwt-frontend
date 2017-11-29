@@ -29,20 +29,34 @@ export default {
     router.push('/authentication')
   },
 
-  check () {
-    if (localStorage.getItem('token')) {
-      this.user.authenticated = true
-    } else {
-      this.user.authenticated = false
-    }
+  check (to, from, next) {
+    axios.get('http://dev.lumen/auth/check', this.getAuthHeader())
+    .then(res => {
+      console.log('Response received', res.data)
+      next()
+    }).catch(e => {
+      router.push('/authentication')
+    })
 
-    console.log('Attempt to check auth')
-    console.log('Auth status:', this.user.authenticated, localStorage.getItem('token'))
+    //   .then((res) => {
+    //     console.log('Received response')
+    //     this.user.authenticated = true
+    //     status = true
+    //   }).catch(e => {
+    //     console.log('Error received', e)
+    //     this.user.authenticated = false
+    //     status = false
+    //   })
+    // }
+    // this.user.authenticated = false
+    // return status
   },
 
   getAuthHeader () {
     return {
-      'Authorization': 'Bearer ' + localStorage.getItem('token')
+      headers: {
+        'Authorization': 'Bearer ' + localStorage.getItem('token')
+      }
     }
   },
 
