@@ -12,6 +12,9 @@
     <div class="submit-input">
       <button type="button" class="submit-button" v-on:click="authLogin">Login</button>
     </div>
+    <div class="submit-input">
+      <button type="button" class="submit-button" v-on:click="checkAuth">Check auth</button>
+    </div>
   </form>
 </template>
 
@@ -35,13 +38,15 @@
     methods: {
       authLogin () {
         auth.login(this.user, '/')
-        console.log(auth.getAuthHeader())
         // axios.post('http://dev.lumen/auth/login', this.user)
         //      .then(res => {
         //        console.log(res.data)
         //      }).catch(e => {
         //        console.log(e)
         //      })
+      },
+      checkAuth () {
+        auth.check()
       }
     }
   }

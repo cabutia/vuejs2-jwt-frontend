@@ -19,6 +19,7 @@
 </template>
 
 <script>
+import auth from '@/auth'
 import axios from 'axios'
 
 export default {
@@ -36,11 +37,10 @@ export default {
   methods: {
     fetchStudents () {
       let url = 'http://dev.lumen/students'
-      axios.get(url).then(response => {
+      axios.get(url, auth.getAuthHeader()).then(response => {
         this.students = response.data
         this.pageLoading = false
-      })
-      console.log(this.students)
+      }).catch(e => console.log(e))
     }
   }
 }
